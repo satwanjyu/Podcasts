@@ -12,6 +12,7 @@ using Podcasts.Notifications;
 using Podcasts.Services;
 using Podcasts.ViewModels;
 using Podcasts.Views;
+using Windows.Media.Playback;
 
 namespace Podcasts;
 
@@ -43,6 +44,8 @@ public partial class App : Application
 
     public static UIElement? AppTitlebar { get; set; }
 
+    public static MediaPlayer MediaPlayer { get; } = new MediaPlayer(); 
+
     public App()
     {
         InitializeComponent();
@@ -69,14 +72,11 @@ public partial class App : Application
             services.AddSingleton<INavigationService, NavigationService>();
 
             // Core Services
-            services.AddSingleton<ISampleDataService, SampleDataService>();
             services.AddSingleton<IFileService, FileService>();
 
             // Views and ViewModels
             services.AddTransient<SettingsViewModel>();
             services.AddTransient<SettingsPage>();
-            services.AddTransient<EpisodesViewModel>();
-            services.AddTransient<EpisodesPage>();
             services.AddTransient<ShowsDetailViewModel>();
             services.AddTransient<ShowsDetailPage>();
             services.AddTransient<ShowsViewModel>();

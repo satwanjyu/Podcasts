@@ -1,4 +1,5 @@
-﻿using Microsoft.UI.Xaml.Controls;
+﻿using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 
 using Podcasts.ViewModels;
 
@@ -15,5 +16,12 @@ public sealed partial class ShowsPage : Page
     {
         ViewModel = App.GetService<ShowsViewModel>();
         InitializeComponent();
+    }
+
+    private async void OnFollowClick(object sender, RoutedEventArgs e)
+    {
+        var showUrl = ShowUrlBox.Text;
+        // TODO: catch exceptions from XmlReader
+        await ViewModel.FollowShow(showUrl);
     }
 }

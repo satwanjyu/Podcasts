@@ -1,10 +1,7 @@
-﻿using System.Diagnostics;
-
-using Microsoft.UI.Xaml.Controls;
+﻿using System.Xml.Linq;
 
 namespace Podcasts.Tests.MSTest;
 
-// TODO: Write unit tests.
 // https://docs.microsoft.com/visualstudio/test/getting-started-with-unit-testing
 // https://docs.microsoft.com/visualstudio/test/using-microsoft-visualstudio-testtools-unittesting-members-in-unit-tests
 // https://docs.microsoft.com/visualstudio/test/run-unit-tests-with-test-explorer
@@ -12,39 +9,25 @@ namespace Podcasts.Tests.MSTest;
 [TestClass]
 public class TestClass
 {
-    [ClassInitialize]
-    public static void ClassInitialize(TestContext context)
+    [TestMethod]
+    public void ReadFromRawXML()
     {
-        Debug.WriteLine("ClassInitialize");
-    }
-
-    [ClassCleanup]
-    public static void ClassCleanup()
-    {
-        Debug.WriteLine("ClassCleanup");
-    }
-
-    [TestInitialize]
-    public void TestInitialize()
-    {
-        Debug.WriteLine("TestInitialize");
-    }
-
-    [TestCleanup]
-    public void TestCleanup()
-    {
-        Debug.WriteLine("TestCleanup");
+        var root = XElement.Load("Assets/feed.xml");
+        var title =
+            from el in root.Elements()
+            where el.Name.LocalName == "channel"
+            from el2 in el.Elements()
+            where el2.Name.LocalName == "title"
+            select el2.Value;
+        Assert.AreEqual(title.First(), "Lorem ipsum feed for an interval of 1 minutes with 10 item(s)");
     }
 
     [TestMethod]
-    public void TestMethod()
+    public async Task ReadWithWindowsWebSyndication()
     {
-        Assert.IsTrue(true);
-    }
-
-    [UITestMethod]
-    public void UITestMethod()
-    {
-        Assert.AreEqual(0, new Grid().ActualWidth);
+        var client = new Windows.Web.Syndication.SyndicationClient();
+        var feed = await client.RetrieveFeedAsync(new Uri("https://lorem-rss.herokuapp.com/feed"));
+        Assert.AreEqual(feed.Title.Text, "Lorem ipsum feed for an interval of 1 minutes with 10 item(s)");
+        Assert.IsTrue(feed.Items[0].Title.Text.Contains("Lorem ipsum"));
     }
 }

@@ -34,9 +34,9 @@ public sealed partial class ShowsDetailPage : Page
         {
             var navigationService = App.GetService<INavigationService>();
 
-            if (ViewModel.Item != null)
+            if (ViewModel.Feed != null)
             {
-                navigationService.SetListDataItemForNextConnectedAnimation(ViewModel.Item);
+                navigationService.SetListDataItemForNextConnectedAnimation(ViewModel.Feed);
             }
         }
     }

@@ -6,34 +6,44 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:animations="using:CommunityToolkit.WinUI.UI.Animations"
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
-    xmlns:models="using:Podcasts.Core.Models"
+    xmlns:models="using:Windows.Web.Syndication"
+    xmlns:behaviors="using:Podcasts.Behaviors"
+    behaviors:NavigationViewHeaderBehavior.HeaderMode="Never"
     mc:Ignorable="d">
 
     <Grid x:Name="ContentArea">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <TextBox x:Name="ShowUrlBox" PlaceholderText="Follow a show by URL" MinWidth="300"/>
+            <Button x:Name="FollowButton" Margin="5,0,0,0" Click="OnFollowClick">Follow</Button>
+        </StackPanel>
         <controls:AdaptiveGridView
+            Grid.Row="1"
+            Margin="0,5,0,0"
             animations:Connected.ListItemElementName="itemThumbnail"
             animations:Connected.ListItemKey="animationKeyContentGrid"
-            DesiredWidth="180"
-            ItemHeight="160"
+            DesiredWidth="200"
+            ItemHeight="235"
             IsItemClickEnabled="True"
             ItemClickCommand="{x:Bind ViewModel.ItemClickCommand}"
             ItemsSource="{x:Bind ViewModel.Source,Mode=OneWay}"
             SelectionMode="None"
             StretchContentForSingleRow="False">
             <controls:AdaptiveGridView.ItemTemplate>
-                <DataTemplate x:DataType="models:SampleOrder">
+                <DataTemplate x:DataType="models:SyndicationFeed">
                     <Grid
                         x:Name="itemThumbnail"
-                        Padding="{StaticResource XSmallLeftTopRightBottomMargin}">
-                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <FontIcon
-                                Glyph="{x:Bind Symbol}"
-                                AutomationProperties.Name="{x:Bind SymbolName}" />
-                            <TextBlock
-                                Margin="{StaticResource XXSmallTopMargin}"
-                                HorizontalAlignment="Center"
-                                Style="{ThemeResource BodyTextStyle}"
-                                Text="{x:Bind Company}" />
+                        Padding="5">
+                        <StackPanel Orientation="Vertical">
+                            <Image Height="180">
+                                <Image.Source>
+                                    <BitmapImage UriSource="{x:Bind ImageUri}"/>
+                                </Image.Source>
+                            </Image>
+                            <TextBlock Margin="5" Text="{x:Bind Title.Text}" TextWrapping="WrapWholeWords"/>
                         </StackPanel>
                     </Grid>
                 </DataTemplate>

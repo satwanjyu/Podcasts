@@ -16,7 +16,6 @@ public class PageService : IPageService
     {
         Configure<ShowsViewModel, ShowsPage>();
         Configure<ShowsDetailViewModel, ShowsDetailPage>();
-        Configure<EpisodesViewModel, EpisodesPage>();
         Configure<SettingsViewModel, SettingsPage>();
     }
 

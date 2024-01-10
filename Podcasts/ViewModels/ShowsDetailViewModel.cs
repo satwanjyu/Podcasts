@@ -1,33 +1,50 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-
+using Microsoft.UI.Xaml.Controls;
 using Podcasts.Contracts.ViewModels;
-using Podcasts.Core.Contracts.Services;
-using Podcasts.Core.Models;
+using Windows.Media.Core;
+using Windows.Media.Playback;
+using Windows.Web.Syndication;
 
 namespace Podcasts.ViewModels;
 
 public partial class ShowsDetailViewModel : ObservableRecipient, INavigationAware
 {
-    private readonly ISampleDataService _sampleDataService;
 
     [ObservableProperty]
-    private SampleOrder? item;
+    private SyndicationFeed? feed;
 
-    public ShowsDetailViewModel(ISampleDataService sampleDataService)
+    private readonly MediaPlayer mediaPlayer;
+
+    public ShowsDetailViewModel()
     {
-        _sampleDataService = sampleDataService;
+        mediaPlayer = App.MediaPlayer;
     }
 
-    public async void OnNavigatedTo(object parameter)
+    public void OnNavigatedTo(object parameter)
     {
-        if (parameter is long orderID)
+        if (parameter is SyndicationFeed feed)
         {
-            var data = await _sampleDataService.GetContentGridDataAsync();
-            Item = data.First(i => i.OrderID == orderID);
+            Feed = feed;
         }
     }
 
     public void OnNavigatedFrom()
     {
+    }
+
+    public void EpisodeListViewSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (e.AddedItems.FirstOrDefault() is SyndicationItem item)
+        {
+            var uris =
+                from link in item.Links
+                where link.MediaType == "audio/mpeg"
+                select link.Uri;
+            if (uris.FirstOrDefault() is Uri uri)
+            {
+                mediaPlayer.Source = MediaSource.CreateFromUri(uri);
+                mediaPlayer.Play();
+            }
+        }
     }
 }
