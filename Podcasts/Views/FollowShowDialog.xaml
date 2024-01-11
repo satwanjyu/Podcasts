@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentDialog
+    x:Class="Podcasts.Views.FollowShowDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Style="{StaticResource DefaultContentDialogStyle}"
+    Title="Follow a show by URL"
+    PrimaryButtonText="Follow"
+    SecondaryButtonText="Cancel"
+    DefaultButton="Primary">
+    <TextBox 
+        x:Name="urlTextBox"
+        Text="{x:Bind Url, Mode=TwoWay}"
+        Width="400" 
+        TextWrapping="Wrap" 
+        AcceptsReturn="False"/>
+</ContentDialog>

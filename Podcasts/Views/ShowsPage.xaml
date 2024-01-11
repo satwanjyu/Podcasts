@@ -16,10 +16,18 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <TextBox x:Name="ShowUrlBox" PlaceholderText="Follow a show by URL" MinWidth="300"/>
-            <Button x:Name="FollowButton" Margin="5,0,0,0" Click="OnFollowClick">Follow</Button>
-        </StackPanel>
+        <RelativePanel Grid.Row="0">
+            <TextBlock x:Name="ShowsTitle" Text="Shows" Style="{ThemeResource TitleTextBlockStyle}"/>
+            <Button 
+                RelativePanel.AlignVerticalCenterWith="ShowsTitle"
+                RelativePanel.AlignRightWithPanel="True"
+                Click="FollowShow_Click">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <FontIcon FontSize="16" Glyph="&#xE710;" />
+                    <TextBlock Text="Follow a new show" />
+                </StackPanel>
+            </Button>
+        </RelativePanel>
         <controls:AdaptiveGridView
             Grid.Row="1"
             Margin="0,5,0,0"

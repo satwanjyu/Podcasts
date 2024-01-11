@@ -18,10 +18,16 @@ public sealed partial class ShowsPage : Page
         InitializeComponent();
     }
 
-    private async void OnFollowClick(object sender, RoutedEventArgs e)
+    private async void FollowShow_Click(object sender, RoutedEventArgs e)
     {
-        var showUrl = ShowUrlBox.Text;
-        // TODO: catch exceptions from XmlReader
-        await ViewModel.FollowShow(showUrl);
+        var dialog = new FollowShowDialog
+        {
+            XamlRoot = XamlRoot
+        };
+        var result = await dialog.ShowAsync();
+        if (result == ContentDialogResult.Primary)
+        {
+            await ViewModel.FollowShow(dialog.Url);
+        }
     }
 }
