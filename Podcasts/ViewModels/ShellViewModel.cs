@@ -25,11 +25,20 @@ public partial class ShellViewModel : ObservableRecipient
         get;
     }
 
-    public ShellViewModel(INavigationService navigationService, INavigationViewService navigationViewService)
+    public IAudioPlayerService? AudioPlayerService
+    {
+        get; set;
+    }
+
+    [ObservableProperty]
+    private bool isPlaying = false;
+
+    public ShellViewModel(INavigationService navigationService, INavigationViewService navigationViewService, IAudioPlayerService audioPlayerService)
     {
         NavigationService = navigationService;
         NavigationService.Navigated += OnNavigated;
         NavigationViewService = navigationViewService;
+        AudioPlayerService = audioPlayerService;
     }
 
     private void OnNavigated(object sender, NavigationEventArgs e)
@@ -46,6 +55,24 @@ public partial class ShellViewModel : ObservableRecipient
         if (selectedItem != null)
         {
             Selected = selectedItem;
+        }
+    }
+
+    public void PlayPause()
+    {
+        if (AudioPlayerService is null)
+        {
+            return;
+        }
+        if (IsPlaying)
+        {
+            AudioPlayerService.Pause();
+            IsPlaying = false;
+        }
+        else
+        {
+            AudioPlayerService.Play();
+            IsPlaying = true;
         }
     }
 }

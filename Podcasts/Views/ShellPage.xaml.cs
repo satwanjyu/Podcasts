@@ -1,12 +1,12 @@
 ﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
 
 using Podcasts.Contracts.Services;
 using Podcasts.Helpers;
 using Podcasts.ViewModels;
-
+using Windows.Media.Core;
+using Windows.Media.Playback;
 using Windows.System;
 
 namespace Podcasts.Views;
@@ -82,4 +82,6 @@ public sealed partial class ShellPage : Page
 
         args.Handled = result;
     }
+
+    public static string PlayPauseButtonGlyph(bool isPlaying) => isPlaying ? "\uE769" : "\uE768";
 }

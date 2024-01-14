@@ -44,8 +44,6 @@ public partial class App : Application
 
     public static UIElement? AppTitlebar { get; set; }
 
-    public static MediaPlayer MediaPlayer { get; } = new MediaPlayer(); 
-
     public App()
     {
         InitializeComponent();
@@ -70,6 +68,7 @@ public partial class App : Application
             services.AddSingleton<IActivationService, ActivationService>();
             services.AddSingleton<IPageService, PageService>();
             services.AddSingleton<INavigationService, NavigationService>();
+            services.AddSingleton<IAudioPlayerService, AudioPlayerService>();
 
             // Core Services
             services.AddSingleton<IFileService, FileService>();
@@ -82,7 +81,7 @@ public partial class App : Application
             services.AddTransient<ShowsViewModel>();
             services.AddTransient<ShowsPage>();
             services.AddTransient<ShellPage>();
-            services.AddTransient<ShellViewModel>();
+            services.AddSingleton<ShellViewModel>();
 
             // Configuration
             services.Configure<LocalSettingsOptions>(context.Configuration.GetSection(nameof(LocalSettingsOptions)));

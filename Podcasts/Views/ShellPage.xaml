@@ -7,6 +7,7 @@
     xmlns:helpers="using:Podcasts.Helpers"
     xmlns:behaviors="using:Podcasts.Behaviors"
     xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:views="using:Podcasts.Views"
     Loaded="OnLoaded">
 
     <Grid>
@@ -15,15 +16,16 @@
               Height="{Binding ElementName=NavigationViewControl, Path=CompactPaneLength}"
               IsHitTestVisible="True"
               VerticalAlignment="Top">
-            <Image Source="/Assets/WindowIcon.ico"
-                   HorizontalAlignment="Left"
-                   Width="16"
-                   Height="16" />
-            <TextBlock x:Name="AppTitleBarText"
-                       VerticalAlignment="Center"
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Image Source="/Assets/WindowIcon.ico"
+                       Width="16"
+                       Height="16" />
+                <TextBlock 
+                       x:Name="AppTitleBarText"
+                       Margin="{StaticResource SmallLeftMargin}"
                        TextWrapping="NoWrap"
-                       Style="{StaticResource CaptionTextBlockStyle}"
-                       Margin="28,0,0,0"/>
+                       Style="{StaticResource BodyTextBlockStyle}"/>
+            </StackPanel>
         </Grid>
         <NavigationView
             x:Name="NavigationViewControl"
@@ -32,9 +34,14 @@
             IsBackEnabled="{x:Bind ViewModel.IsBackEnabled, Mode=OneWay}"
             SelectedItem="{x:Bind ViewModel.Selected, Mode=OneWay}"
             IsSettingsVisible="True"
-            ExpandedModeThresholdWidth="1280"
+            OpenPaneLength="280"
+            ExpandedModeThresholdWidth="800"
             DisplayModeChanged="NavigationViewControl_DisplayModeChanged"
             Header="{x:Bind ((ContentControl)ViewModel.Selected).Content, Mode=OneWay}">
+            <NavigationView.AutoSuggestBox>
+                <!--TODO: Search functionaility-->
+                <AutoSuggestBox PlaceholderText="Search" QueryIcon="Find"/>
+            </NavigationView.AutoSuggestBox>
             <NavigationView.MenuItems>
                 <!--
                 TODO: Update item titles by updating <x:Uid>.Content entries in Strings/en-us/Resources.resw.
@@ -43,6 +50,7 @@
                 TODO: Update item icons by updating FontIcon.Glyph properties.
                 https://docs.microsoft.com/windows/apps/design/style/segoe-fluent-icons-font#icon-list
                 -->
+                <NavigationViewItemHeader Content="Library"/>
                 <NavigationViewItem x:Uid="Shell_Shows" helpers:NavigationHelper.NavigateTo="Podcasts.ViewModels.ShowsViewModel">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xf0e2;"/>
@@ -72,8 +80,27 @@
                     </behaviors:NavigationViewHeaderBehavior.DefaultHeaderTemplate>
                 </behaviors:NavigationViewHeaderBehavior>
             </i:Interaction.Behaviors>
-            <Grid Margin="{StaticResource NavigationViewPageContentMargin}">
-                <Frame x:Name="NavigationFrame" />
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Frame x:Name="NavigationFrame" Margin="{StaticResource NavigationViewPageContentMargin}"/>
+                <NavigationViewItemSeparator Grid.Row="1"/>
+                <Grid Grid.Row="2" Margin="56,8,56,8">
+                    <StackPanel x:Name="playbackControlGroup" Orientation="Horizontal">
+                        <Button Click="{x:Bind ViewModel.AudioPlayerService.SkipBackward}" Background="Transparent" BorderBrush="Transparent">
+                            <FontIcon FontSize="20" Glyph="&#xED3C;"/>
+                        </Button>
+                        <Button Click="{x:Bind ViewModel.PlayPause}" Background="Transparent" BorderBrush="Transparent">
+                            <FontIcon FontSize="20" Glyph="{x:Bind views:ShellPage.PlayPauseButtonGlyph(ViewModel.IsPlaying), Mode=OneWay}"/>
+                        </Button>
+                        <Button Click="{x:Bind ViewModel.AudioPlayerService.SkipForward}" Background="Transparent" BorderBrush="Transparent">
+                                <FontIcon FontSize="20" Glyph="&#xED3D;"/>
+                            </Button>
+                    </StackPanel>
+                </Grid>
             </Grid>
         </NavigationView>
     </Grid>
