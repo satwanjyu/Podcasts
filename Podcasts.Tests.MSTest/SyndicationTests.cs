@@ -7,7 +7,7 @@ namespace Podcasts.Tests.MSTest;
 // https://docs.microsoft.com/visualstudio/test/run-unit-tests-with-test-explorer
 
 [TestClass]
-public class TestClass
+public class SyndicationTests
 {
     [TestMethod]
     public void ReadFromRawXML()

@@ -75,4 +75,8 @@ public partial class ShellViewModel : ObservableRecipient
             IsPlaying = true;
         }
     }
+
+    private async Task UpdateProgress(string itemId)
+    {
+    }
 }

@@ -85,6 +85,8 @@ public partial class App : Application
 
             // Configuration
             services.Configure<LocalSettingsOptions>(context.Configuration.GetSection(nameof(LocalSettingsOptions)));
+
+            services.AddSingleton<SqliteDataService>();
         }).
         Build();
 
@@ -106,5 +108,11 @@ public partial class App : Application
         App.GetService<IAppNotificationService>().Show(string.Format("AppNotificationSamplePayload".GetLocalized(), AppContext.BaseDirectory));
 
         await App.GetService<IActivationService>().ActivateAsync(args);
+
+        var sqliteService = App.GetService<SqliteDataService>();
+        var connection = await sqliteService.GetOpenConnectionAsync();
+        sqliteService.connection = connection;
+        await sqliteService.CreateFeedsTable(connection);
+        await sqliteService.CreateItemsTable(connection);
     }
 }
